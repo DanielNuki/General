@@ -1,0 +1,29 @@
+import os
+import shutil
+
+def find_files(extension, directory):
+    files_found = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(extension):
+                file_path = os.path.join(root, file)
+                files_found.append({
+                    'file_path': file_path,
+                    'date': os.path.getmtime(file_path),
+                    'size': os.path.getsize(file_path)
+                })
+    return files_found
+
+def main():
+    extension = input("Enter file extension (e.g. *.jpeg): ")
+    directory = input("Enter directory to search: ")
+    files_found = find_files(extension, directory)
+    print(f"Found {len(files_found)} files with extension {extension}")
+    for file in files_found:
+        print(f"File: {file['file_path']}, Date: {file['date']}, Size: {file['size']}")
+    copy_to = input("Enter directory to copy files to: ")
+    for file in files_found:
+        shutil.copy(file['file_path'], copy_to)
+
+if __name__ == '__main__':
+    main()
